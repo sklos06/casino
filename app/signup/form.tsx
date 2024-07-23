@@ -18,7 +18,7 @@ function Form() {
                     <input type="text" id="password"/>
                 </div>
                 <div className={styles.formGroup}>
-                    <input type="button" value="Log in"/>
+                    <input type="button" value="Log in" className={styles.btn}/>
                 </div>
             </form>
             <div className={styles.signUp}>
