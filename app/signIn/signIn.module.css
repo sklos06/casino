@@ -1,4 +1,4 @@
-.page{
+.page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,26 +8,44 @@
     height: 100vh;
 }
 
-.form{
-    width: 250px;
+.form {
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 
 }
-.formGroup{
+
+.formGroup {
     display: flex;
     flex-direction: column;
-    width:100%;
-    margin: 10px 0px;
+    width: 100%;
+    margin: 10px 0;
 }
 
-.formGroup label{
+.formGroup label {
     font-size: 1.2rem;
     font-weight: bold;
     color: rgba(58, 58, 60, 0.7);
     margin-bottom: 10px;
+}
+
+.formGroup input[type="text"] {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #4A2C2A;
+    border: 1px solid #8B5E3C;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formGroup input[type="text"]:focus {
+    outline: none;
+    border-color: #8B5E3C;
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.5);
 }
 
 .required {
@@ -50,7 +68,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    font-size: 0.5rem;
+    font-size: 0.9rem;
     font-weight: 400;
     z-index: 10;
 }
@@ -92,25 +110,7 @@
 }
 
 
-
 .signUp {
     font-size: 0.7rem;
 }
 
-.formGroup input[type="text"] {
-    padding: 12px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: #4A2C2A;
-    border: 1px solid #8B5E3C;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.formGroup input[type="text"]:focus {
-    outline: none;
-    border-color: #8B5E3C;
-    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.5);
-}

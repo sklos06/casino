@@ -1,0 +1,130 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 128, 128, 0.65);
+    width: 100vw;
+    height: 100vh;
+}
+
+.form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.formGroup label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: rgba(58, 58, 60, 0.7);
+    margin-bottom: 10px;
+}
+
+.formGroup input[type="text"] {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #4A2C2A;
+    border: 1px solid #8B5E3C;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formGroup input[type="text"]:focus {
+    outline: none;
+    border-color: #8B5E3C;
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.5);
+}
+
+.accData {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.required {
+    position: relative;
+    cursor: pointer;
+    color: rgba(220, 19, 19);
+}
+
+.required::after {
+    content: 'Required field';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.50);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 400;
+    z-index: 10;
+}
+
+.required:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.btn {
+    align-self: center;
+    padding: 14px 70px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: #4A2C2A;
+    border: 1px solid #8B5E3C;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn:hover {
+    background-color: #3A2321;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    background-color: #2C1A18;
+    transform: translateY(0);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.5);
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0;
+}

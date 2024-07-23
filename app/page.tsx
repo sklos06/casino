@@ -4,7 +4,8 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Link href="/signup"><input type="button" value="Get started!"/></Link>
+        <Link href="signIn"><input type="button" value="Log in"/></Link>
+        <Link href="signUp"><input type="button" value="Sign up"/></Link>
     </main>
   )
 }

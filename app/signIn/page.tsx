@@ -1,8 +1,8 @@
 import React from 'react';
-import Form from './form'
+import SignIn from "./signIn";
 function Page() {
     return (
-        <><Form/></>
+        <SignIn/>
     );
 }
 
