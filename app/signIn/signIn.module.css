@@ -30,7 +30,7 @@
     margin-bottom: 10px;
 }
 
-.formGroup input[type="text"] {
+.formGroup input{
     padding: 12px 20px;
     font-size: 1rem;
     font-weight: 600;
@@ -42,7 +42,7 @@
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.formGroup input[type="text"]:focus {
+.formGroup input:focus {
     outline: none;
     border-color: #8B5E3C;
     box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.5);
