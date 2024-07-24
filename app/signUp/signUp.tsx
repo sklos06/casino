@@ -60,14 +60,14 @@ function SignUp() {
                             <label htmlFor="password">Password:
                                 <span className={styles.required}>*</span>
                             </label>
-                            <input type="text" id="password" name="password" value={user.password}
+                            <input type="password" id="password" name="password" value={user.password}
                                    onChange={handleInput}/>
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="repassword">Repeat password:
                                 <span className={styles.required}>*</span>
                             </label>
-                            <input type="text" id="repassword" name="repassword" value={user.repassword}
+                            <input type="password" id="repassword" name="repassword" value={user.repassword}
                                    onChange={handleInput}/>
                         </div>
                     </div>
