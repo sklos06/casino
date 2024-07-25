@@ -1,8 +1,8 @@
 import React from 'react';
-
+import Blackjack from './blackjack'
 function Page() {
     return (
-        <div></div>
+        <Blackjack/>
     );
 }
 

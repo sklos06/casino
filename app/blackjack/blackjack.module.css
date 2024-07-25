@@ -1,0 +1,51 @@
+.blackjackPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.table{
+    display: flex;
+    width: 1000px;
+    height: 600px;
+    border-radius: 100px;
+    background-color: green;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px;
+}
+.cards{
+    background-color: black;
+    height: 100px;
+    width: 70px;
+    border-radius: 10px;
+    align-self: center;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    width: 1000px;
+    justify-content: center;
+}
+.btn {
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}

@@ -9,9 +9,9 @@ type LogIn = {
 
 function SignIn() {
     const [user, setUser] = useState<LogIn>({
-            username: '',
-            password: ''
-        })
+        username: '',
+        password: ''
+    })
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
         const {name, value} = event.target
@@ -23,23 +23,26 @@ function SignIn() {
 
 
     return (
-        <section className={styles.page}>
-            <form action="POST" className={styles.form}>
-                <div className={styles.formGroup}>
-                    <label htmlFor="username">Username:
-                        <span className={styles.required}>*</span>
-                    </label>
-                    <input type="text" id="username" name="username" value={user.username} onChange={handleInput}/>
-                </div>
-                <div className={styles.formGroup}>
-                    <label htmlFor="password">Password:
-                        <span className={styles.required}>*</span>
-                    </label>
-                    <input type="password" id="password" name="password" value={user.password} onChange={handleInput}/>
-                </div>
-                <input type="submit" value="Sign in" className={styles.btn}/>
-            </form>
-        </section>
+        <main>
+            <section className={styles.page}>
+                <form action="POST" className={styles.form}>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="username">Username:
+                            <span className={styles.required}>*</span>
+                        </label>
+                        <input type="text" id="username" name="username" value={user.username} onChange={handleInput}/>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="password">Password:
+                            <span className={styles.required}>*</span>
+                        </label>
+                        <input type="password" id="password" name="password" value={user.password}
+                               onChange={handleInput}/>
+                    </div>
+                    <input type="submit" value="Sign in" className={styles.btn}/>
+                </form>
+            </section>
+        </main>
     );
 }
 
