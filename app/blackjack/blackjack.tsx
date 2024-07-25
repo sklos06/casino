@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './blackjack.module.css'
 
 function Blackjack() {
+    const [c]
     return (
         <main className={styles.blackjackPage}>
             <div className={styles.table}>
