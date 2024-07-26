@@ -9,7 +9,7 @@
 
 .table{
     display: flex;
-    width: 1000px;
+    width: 1010px;
     height: 600px;
     border-radius: 100px;
     background-color: green;
@@ -18,12 +18,18 @@
     padding: 50px;
 }
 .cards{
-    background-color: black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+.card{
     height: 100px;
     width: 70px;
     border-radius: 10px;
     align-self: center;
 }
+
 .buttons{
     display: flex;
     flex-direction: row;
