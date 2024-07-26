@@ -70,9 +70,15 @@ function Blackjack() {
         cards: [],
         totalValue: 0
     })
+    const [croupierHand, setCroupierHand] = useState<Hand>({
+        cards: [],
+        totalValue: 0
+    })
+    const [initialized, setInitialized] = useState<boolean>(false);
 
     useEffect(() => {
         setDeck(basicDeck);
+        setInitialized(true)
     }, [])
 
 
@@ -82,33 +88,67 @@ function Blackjack() {
     }
 
     function getCard(): void {
-        const newCard: Card = getRandomCard(deck);
-        setPlayerHand(p => {
-            const newTotalValue: number = p.totalValue + newCard.value;
-            return {
-                cards: [...p.cards, newCard],
-                totalValue: newTotalValue
-            };
-        });
+        if (deck.length > 0) {
+            const newCard: Card = getRandomCard(deck);
+            setPlayerHand(p => {
+                const newTotalValue: number = p.totalValue + newCard.value;
+                return {
+                    cards: [...p.cards, newCard],
+                    totalValue: newTotalValue
+                };
+            });
+            setDeck(d => d.filter(card => card !== newCard));
+        }
     }
+
+    useEffect(() => {
+        if (deck.length > 0) {
+            const initialCard: Card = getRandomCard(deck);
+            console.log(initialCard.value)
+            setCroupierHand(c => {
+                const newTotalValue: number = c.totalValue + initialCard.value;
+                return {
+                    cards: [...c.cards, initialCard],
+                    totalValue: newTotalValue
+                };
+            });
+            setDeck(d => d.filter(card => card !== initialCard));
+        }
+        getCard()
+    }, [initialized]);
 
     return (
         <main className={styles.blackjackPage}>
             <div className={styles.table}>
-                <div className={styles.cards}>
-
+                <div className={styles.hand}>
+                    <div className={styles.cards}>
+                        {croupierHand.cards.map((card, index) => (
+                            card ? (
+                                <img
+                                    key={index}
+                                    alt={card.img}
+                                    className={styles.card}
+                                    src={`/images/cards/${card.img}`}
+                                />
+                            ) : null
+                        ))}
+                    </div>
+                    <div className={styles.totalValue}>{croupierHand.totalValue}</div>
                 </div>
-                <div className={styles.cards}>
-                    {playerHand.cards.map((card, index) => (
-                        card ? (
-                            <img
-                                key={index}
-                                alt={card.img}
-                                className={styles.card}
-                                src={`/images/cards/${card.img}`}
-                            />
-                        ) : null
-                    ))}
+                <div className={styles.hand}>
+                    <div className={styles.totalValue}>{playerHand.totalValue}</div>
+                    <div className={styles.cards}>
+                        {playerHand.cards.map((card, index) => (
+                            card ? (
+                                <img
+                                    key={index}
+                                    alt={card.img}
+                                    className={styles.card}
+                                    src={`/images/cards/${card.img}`}
+                                />
+                            ) : null
+                        ))}
+                    </div>
                 </div>
             </div>
             <div className={styles.buttons}>

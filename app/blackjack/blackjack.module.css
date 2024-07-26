@@ -9,7 +9,7 @@
 
 .table{
     display: flex;
-    width: 1010px;
+    width: 1000px;
     height: 600px;
     border-radius: 100px;
     background-color: green;
@@ -17,11 +17,20 @@
     justify-content: space-between;
     padding: 50px;
 }
+.hand{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
 .cards{
     display: flex;
+    width: 100%;
     flex-direction: row;
-    flex-wrap: nowrap;
     overflow: hidden;
+    justify-content: center;
+    gap: 5px;
 }
 .card{
     height: 100px;
@@ -54,4 +63,13 @@
 .btn:hover {
     background-color: #0056b3;
     transform: scale(1.05);
+}
+
+.totalValue{
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
 }
