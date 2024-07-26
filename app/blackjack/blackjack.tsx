@@ -1,6 +1,7 @@
 'use client'
 import React, {useState, useEffect} from 'react';
 import styles from './blackjack.module.css'
+import {func} from "prop-types";
 
 function Blackjack() {
     type Card = {
@@ -75,6 +76,7 @@ function Blackjack() {
         totalValue: 0
     })
     const [initialized, setInitialized] = useState<boolean>(false);
+    const [isStopped, setIsStoppped] = useState<boolean>(false)
 
     useEffect(() => {
         setDeck(basicDeck);
@@ -87,8 +89,8 @@ function Blackjack() {
         return cards[randomIndex];
     }
 
-    function getCard(): void {
-        if (deck.length > 0) {
+    function handleHit(): void {
+        if (deck.length > 0 && !(isStopped)) {
             const newCard: Card = getRandomCard(deck);
             setPlayerHand(p => {
                 const newTotalValue: number = p.totalValue + newCard.value;
@@ -101,21 +103,65 @@ function Blackjack() {
         }
     }
 
+
     useEffect(() => {
         if (deck.length > 0) {
             const initialCard: Card = getRandomCard(deck);
-            console.log(initialCard.value)
             setCroupierHand(c => {
                 const newTotalValue: number = c.totalValue + initialCard.value;
                 return {
-                    cards: [...c.cards, initialCard],
+                    cards: [initialCard],
                     totalValue: newTotalValue
                 };
             });
             setDeck(d => d.filter(card => card !== initialCard));
         }
-        getCard()
+        handleHit()
+        handleHit()
     }, [initialized]);
+
+    function croupierTurn(): void {
+        if (deck.length > 0 && croupierHand.totalValue <= playerHand.totalValue && croupierHand.totalValue < 17) {
+            const newCard: Card = getRandomCard(deck);
+            setCroupierHand(c => {
+                const newTotalValue: number = c.totalValue + newCard.value;
+                return {
+                    cards: [...c.cards, newCard],
+                    totalValue: newTotalValue
+                };
+            });
+            setDeck(d => d.filter(card => card !== newCard));
+        }
+    }
+
+    function handleStand(): void {
+        setIsStoppped(true);
+        if(!(isStopped)) croupierTurn();
+    }
+
+    useEffect(() => {
+        if (playerHand.totalValue > 21) {
+            setIsStoppped(true);
+            console.log("YOU LOST");
+        } else if (playerHand.totalValue === 21) {
+            console.log("BLACKJACK");
+            setIsStoppped(true);
+            croupierTurn();
+        }
+    }, [playerHand]);
+
+    useEffect(() => {
+        if (croupierHand.cards.length > 1 && croupierHand.totalValue < playerHand.totalValue && croupierHand.totalValue < 17) {
+            setTimeout(croupierTurn,1000);
+        }
+        if (croupierHand.totalValue > playerHand.totalValue && croupierHand.totalValue <= 21) {
+            console.log("YOU LOST!");
+        } else if (croupierHand.totalValue === playerHand.totalValue && croupierHand.totalValue === 21) {
+            console.log("DRAW!");
+        } else if ((croupierHand.totalValue < playerHand.totalValue && croupierHand.totalValue >= 17) || croupierHand.totalValue>21) {
+            console.log("YOU WON!");
+        }
+    }, [croupierHand]);
 
     return (
         <main className={styles.blackjackPage}>
@@ -152,8 +198,8 @@ function Blackjack() {
                 </div>
             </div>
             <div className={styles.buttons}>
-                <button className={styles.btn} onClick={getCard}>HIT</button>
-                <button className={styles.btn}>STAND</button>
+                <button className={styles.btn} onClick={handleHit}>HIT</button>
+                <button className={styles.btn} onClick={handleStand}>STAND</button>
                 <button className={styles.btn}>DOUBLE DOWN</button>
                 <button className={styles.btn}>PLAY AGAIN</button>
             </div>
