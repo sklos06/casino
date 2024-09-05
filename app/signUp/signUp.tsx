@@ -38,10 +38,33 @@ function SignUp() {
         })
     }
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('/api/signUp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+
+            if (response.ok) {
+                console.log('Użytkownik został pomyślnie zarejestrowany.');
+            } else {
+                const errorData = await response.json();
+                console.log(`Błąd: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.log('Wystąpił błąd podczas rejestracji.');
+        }
+    };
+
     return (
         <main>
             <section className={styles.page}>
-                <form action="POST" className={styles.form}>
+                <form action="POST" className={styles.form} onSubmit={handleSubmit}>
                     <div className={styles.accData}>
                         <div className={styles.leftSide}>
                             <div className={styles.formGroup}>

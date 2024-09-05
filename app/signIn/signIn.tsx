@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import styles from './signIn.module.css'
+import { useRouter } from 'next/navigation';
 
 type LogIn = {
     username: string,
@@ -12,6 +13,10 @@ function SignIn() {
         username: '',
         password: ''
     })
+    // const  [userData, setUserData] = useState<User>({
+    //     name:"Guest",
+    //     money: 10000
+    // })
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
         const {name, value} = event.target
@@ -20,12 +25,38 @@ function SignIn() {
             [name]: value
         })
     }
+    const router = useRouter();
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/signIn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
 
+            if (response.ok) {
+                console.log('Użytkownik został pomyślnie zalogowany.');
+                const data = await response.json();
+
+                if (data.redirectUrl) {
+                    router.push(data.redirectUrl);
+                }
+            } else {
+                const errorData = await response.json();
+                console.log(`Błąd: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.log('Wystąpił błąd podczas logowania.');
+        }
+    };
 
     return (
         <main>
             <section className={styles.page}>
-                <form action="POST" className={styles.form}>
+                <form onSubmit={handleSubmit} action="POST" className={styles.form}>
                     <div className={styles.formGroup}>
                         <label htmlFor="username">Username:
                             <span className={styles.required}>*</span>
