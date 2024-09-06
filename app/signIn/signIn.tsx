@@ -3,9 +3,17 @@ import React, {useState} from 'react';
 import styles from './signIn.module.css'
 import { useRouter } from 'next/navigation';
 
+
+const SECRET_KEY = process.env.JWT_SECRET || 'admin';
+
 type LogIn = {
     username: string,
     password: string
+}
+type User = {
+    firstName: string,
+    lastName: string,
+    money: number
 }
 
 function SignIn() {
@@ -13,10 +21,11 @@ function SignIn() {
         username: '',
         password: ''
     })
-    // const  [userData, setUserData] = useState<User>({
-    //     name:"Guest",
-    //     money: 10000
-    // })
+    const  [userData, setUserData] = useState<User>({
+        firstName: 'Guest',
+        lastName: 'Guest',
+        money: 0
+    })
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
         const {name, value} = event.target
