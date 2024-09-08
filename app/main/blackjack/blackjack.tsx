@@ -12,6 +12,7 @@ function Blackjack() {
         cards: Card[],
         totalValue: number
     }
+    const [text, setText] = useState<string>("PLAY");
     const basicDeck: Card[] = [
         {img: 'ace-club.png', value: 11},
         {img: 'ace-diamond.png', value: 11},
@@ -76,13 +77,25 @@ function Blackjack() {
         totalValue: 0
     })
     const [initialized, setInitialized] = useState<boolean>(false);
-    const [isStopped, setIsStoppped] = useState<boolean>(false)
+    const [isStopped, setIsStoppped] = useState<boolean>(false);
+    const [startGame, setStartGame] = useState<boolean>(false);
+
 
     useEffect(() => {
-        setDeck(basicDeck);
-        setInitialized(true)
-    }, [])
-
+        if(startGame){
+            setDeck(basicDeck);
+            setPlayerHand({
+                cards: [],
+                totalValue: 0
+            });
+            setCroupierHand({
+                cards: [],
+                totalValue: 0
+            })
+            setInitialized(true);
+            setStartGame(false);
+        }
+    }, [startGame])
 
     function getRandomCard<T>(cards: T[]): T {
         const randomIndex: number = Math.floor(Math.random() * cards.length);
@@ -105,19 +118,22 @@ function Blackjack() {
 
 
     useEffect(() => {
-        if (deck.length > 0) {
-            const initialCard: Card = getRandomCard(deck);
-            setCroupierHand(c => {
-                const newTotalValue: number = c.totalValue + initialCard.value;
-                return {
-                    cards: [initialCard],
-                    totalValue: newTotalValue
-                };
-            });
-            setDeck(d => d.filter(card => card !== initialCard));
+        if(initialized){
+            if (deck.length > 0) {
+                const initialCard: Card = getRandomCard(deck);
+                setCroupierHand(c => {
+                    const newTotalValue: number = c.totalValue + initialCard.value;
+                    return {
+                        cards: [initialCard],
+                        totalValue: newTotalValue
+                    };
+                });
+                setDeck(d => d.filter(card => card !== initialCard));
+            }
+            handleHit()
+            handleHit()
+            setInitialized(false);
         }
-        handleHit()
-        handleHit()
     }, [initialized]);
 
     function croupierTurn(): void {
@@ -163,6 +179,10 @@ function Blackjack() {
         }
     }, [croupierHand]);
 
+    function handlePlay():void{
+        setStartGame(true);
+        setText("PLAY AGAIN");
+    }
     return (
         <main className={styles.blackjackPage}>
             <div className={styles.table}>
@@ -201,7 +221,7 @@ function Blackjack() {
                 <button className={styles.btn} onClick={handleHit}>HIT</button>
                 <button className={styles.btn} onClick={handleStand}>STAND</button>
                 <button className={styles.btn}>DOUBLE DOWN</button>
-                <button className={styles.btn}>PLAY AGAIN</button>
+                <button className={styles.btn} onClick={handlePlay}>{text}</button>
             </div>
         </main>
     );

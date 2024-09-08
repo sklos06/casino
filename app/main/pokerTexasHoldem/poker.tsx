@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 
 function Poker() {
+
     type Card = {
         img: string;
         value: number;
@@ -9,10 +10,7 @@ function Poker() {
         cards: Card[],
         totalValue: number
     }
-    type tableHand = {
-        cards: Card[],
-        value: number
-    }
+
     // Przypisanie wartości do kart
     const basicDeck: Card[] = [
         {img: 'ace-club.png', value: 11},
@@ -85,10 +83,7 @@ function Poker() {
         cards: [],
         totalValue: 0
     })
-    const [player3Hand, setPlayer3Hand] = useState<Hand>({
-        cards: [],
-        totalValue: 0
-    })
+    const [player3Hand, setPlayer3Hand] = useState<Hand[] | null>(null)
 
 
 
