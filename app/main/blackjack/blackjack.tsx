@@ -92,6 +92,7 @@ function Blackjack() {
                 cards: [],
                 totalValue: 0
             })
+            setIsStoppped(false);
             setInitialized(true);
             setStartGame(false);
         }

@@ -1,7 +1,9 @@
 'use client'
 import React, {useState} from 'react';
 import styles from './signIn.module.css'
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
+import 'boxicons/css/boxicons.min.css';
+
 
 
 const SECRET_KEY = process.env.JWT_SECRET || 'admin';
@@ -21,7 +23,7 @@ function SignIn() {
         username: '',
         password: ''
     })
-    const  [userData, setUserData] = useState<User>({
+    const [userData, setUserData] = useState<User>({
         firstName: 'Guest',
         lastName: 'Guest',
         money: 0
@@ -34,6 +36,7 @@ function SignIn() {
             [name]: value
         })
     }
+
     const router = useRouter();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,23 +66,23 @@ function SignIn() {
     };
 
     return (
-        <main>
-            <section className={styles.page}>
+        <main className={styles.page}>
+            <section className={styles.wrapper}>
+                <h2>Welcome!</h2>
                 <form onSubmit={handleSubmit} action="POST" className={styles.form}>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="username">Username:
-                            <span className={styles.required}>*</span>
-                        </label>
-                        <input type="text" id="username" name="username" value={user.username} onChange={handleInput}/>
+                    <div className={styles.inputField}>
+                        <input type="text" id="username" name="username" placeholder="Username" value={user.username} onChange={handleInput}
+                               required/>
+                        <i className="bx bxs-user"></i>
                     </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="password">Password:
-                            <span className={styles.required}>*</span>
-                        </label>
-                        <input type="password" id="password" name="password" value={user.password}
-                               onChange={handleInput}/>
+                    <div className={styles.inputField}>
+                        <input type="password" id="password" name="password"  placeholder="Password" value={user.password}
+                               onChange={handleInput} required/>
+                        <i className="bx bxs-lock-alt"></i>
                     </div>
+                    <a href="#" className={styles.forgot}><p>Forgot password</p></a>
                     <input type="submit" value="Sign in" className={styles.btn}/>
+                    <p>Do not have an account?<a href="#" className={styles.signUp}>sign up</a></p>
                 </form>
             </section>
         </main>
