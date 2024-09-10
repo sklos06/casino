@@ -9,10 +9,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-
         const money:number = user.money;
-
-        res.status(200).json({ money });
+        const username: string = user.username;
+        res.status(200).json({ username,money });
     } catch (error) {
         res.status(500).json({ error: 'Wystąpił błąd podczas pobierania punktów użytkownika.' });
     }
