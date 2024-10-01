@@ -32,7 +32,8 @@ function Blackjack() {
     const [player, setPlayer] = useState<Player>({username: "Guest", money: 0}); // Player data
     const [bet, setBet] = useState<number>(); // Bet amount
     const [newMoney, setNewMoney] = useState<number>(0); // Value of player's money after changes
-
+    const isBet = useRef<boolean>(false);
+    const multiplier = useRef<number>(1);
     // Basic deck of cards (standard 52-card deck)
     const basicDeck: Card[] = [
         {img: 'ace-club.png', value: 11},
@@ -182,6 +183,7 @@ function Blackjack() {
         if (playerHand.totalValue > 21) {
             setIsStopped(true);
             console.log("YOU LOST");
+            isBet.current = false;
         } else if (playerHand.totalValue === 21) {
             console.log("BLACKJACK");
             setIsStopped(true);
@@ -195,35 +197,71 @@ function Blackjack() {
             setTimeout(croupierTurn, 1000); // Dealer hits again
         }
         // Win/Loss/Draw logic
-        if (croupierHand.totalValue > playerHand.totalValue && croupierHand.totalValue <= 21) {
+        // Check if player has Blackjack
+        if (playerHand.cards.length === 2 && playerHand.totalValue === 21) {
+            // Check if dealer also has Blackjack
+            if (croupierHand.cards.length === 2 && croupierHand.totalValue === 21) {
+                console.log("DRAW! Both you and the dealer have Blackjack.");
+            } else {
+                console.log("BLACKJACK! YOU WON!");
+                multiplier.current = 2.5;
+                if (bet) {
+                    setNewMoney(m =>
+                        m + bet * multiplier.current
+                    )
+                }
+
+            }
+            isBet.current = false;
+        }
+        // Check if dealer has Blackjack
+        else if (croupierHand.cards.length === 2 && croupierHand.totalValue === 21) {
+            console.log("YOU LOST! Dealer has Blackjack.");
+            isBet.current = false;
+        } else if (croupierHand.totalValue > playerHand.totalValue && croupierHand.totalValue <= 21) {
             console.log("YOU LOST!");
+            isBet.current = false;
         } else if (croupierHand.totalValue === playerHand.totalValue && croupierHand.totalValue === 21) {
             console.log("DRAW!");
+            isBet.current = false;
         } else if ((croupierHand.totalValue < playerHand.totalValue && croupierHand.totalValue >= 17) || croupierHand.totalValue > 21) {
             console.log("YOU WON!");
+            multiplier.current = 2;
+            if (bet) {
+                setNewMoney(m =>
+                    m + bet * multiplier.current
+                )
+            }
+
+            isBet.current = false;
         }
     }, [croupierHand]);
 
     // Start a new game when the player clicks "PLAY"
     function handlePlay(): void {
-        setStartGame(true); // Set game start flag
-        setText("PLAY AGAIN"); // Update button text
+        if (isBet) {
+            setStartGame(true); // Set game start flag
+            setText("PLAY AGAIN"); // Update button text
+        }
     }
 
     // Handle bet input change
     function handleBetInput(event: React.ChangeEvent<HTMLInputElement>): void {
-        const stake: number = Number(event.target.value);
-        setBet(stake); // Set the bet amount
+        if (!isBet.current) {
+            const stake: number = Number(event.target.value);
+            setBet(stake); // Set the bet amount
+        }
     }
 
 
     // Place a bet and deduct money from player's balance
     function handleBet(): void {
-        if (bet) {
+        if (bet && !isBet.current) {
             if (bet > player.money) {
                 console.log("You can't bet more than you have");
             } else {
                 setNewMoney(player.money - bet); // Deduct bet from player's money
+                isBet.current = true;
             }
         }
     }
@@ -263,6 +301,7 @@ function Blackjack() {
             <header className={styles.userData}>
                 <p>User: {player.username}</p>
                 <p>Your money: {player.money}</p>
+                <p>Bet: {bet}</p>
             </header>
             <main>
                 <div className={styles.table}>
