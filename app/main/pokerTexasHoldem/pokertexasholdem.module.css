@@ -1,0 +1,45 @@
+.page {
+    background-color: #007BFF ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.tables{
+    background-color: green ;
+    display: flex;
+    flex-direction: column;
+    padding-top: 250px ;
+    padding-bottom: 50px ;
+    width: 1000px;
+    height: 600px;
+    border-radius: 100px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hand{
+   background-color: red;
+    display: flex;
+    width: 150px;
+    gap: 10px;
+    height: 100px;
+}
+
+.cardsPlace{
+    background-color: blue;
+    display: flex;
+    width: 1000px;
+    height: 100px;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card{
+    height: 100px;
+    width: 70px;
+    border-radius: 10px;
+    align-self: center;
+}
