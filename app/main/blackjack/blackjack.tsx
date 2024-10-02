@@ -128,6 +128,11 @@ function Blackjack() {
         return cards[randomIndex];
     }
 
+    // Remove card from deck
+    const removeCardFromDeck = (card: Card) => {
+        setDeck((prevDeck) => prevDeck.filter((c) => c !== card));
+    };
+
     // Function to handle player "HIT" action
     function handleHit(): void {
         if (deck.length > 0 && !isStopped) {
@@ -136,7 +141,7 @@ function Blackjack() {
                 const newTotalValue = prevHand.totalValue + newCard.value;
                 return {cards: [...prevHand.cards, newCard], totalValue: newTotalValue};
             });
-            setDeck((prevDeck) => prevDeck.filter(card => card !== newCard)); // Remove card from deck
+            removeCardFromDeck(newCard);
         }
     }
 
@@ -151,7 +156,7 @@ function Blackjack() {
                     const newTotalValue = prevHand.totalValue + initialCard.value;
                     return {cards: [initialCard], totalValue: newTotalValue};
                 });
-                setDeck((prevDeck) => prevDeck.filter(card => card !== initialCard));
+                removeCardFromDeck(initialCard);
             }
             handleHit(); // Give player two initial cards
             handleHit();
@@ -168,7 +173,7 @@ function Blackjack() {
                 const newTotalValue = prevHand.totalValue + newCard.value;
                 return {cards: [...prevHand.cards, newCard], totalValue: newTotalValue};
             });
-            setDeck((prevDeck) => prevDeck.filter(card => card !== newCard));
+            removeCardFromDeck(newCard);
         }
     }
 
@@ -223,6 +228,9 @@ function Blackjack() {
             isBet.current = false;
         } else if (croupierHand.totalValue === playerHand.totalValue && croupierHand.totalValue === 21) {
             console.log("DRAW!");
+            if (bet) {
+                setNewMoney(m => m + bet);
+            }
             isBet.current = false;
         } else if ((croupierHand.totalValue < playerHand.totalValue && croupierHand.totalValue >= 17) || croupierHand.totalValue > 21) {
             console.log("YOU WON!");
@@ -239,7 +247,7 @@ function Blackjack() {
 
     // Start a new game when the player clicks "PLAY"
     function handlePlay(): void {
-        if (isBet) {
+        if (isBet.current) {
             setStartGame(true); // Set game start flag
             setText("PLAY AGAIN"); // Update button text
         }
@@ -305,36 +313,43 @@ function Blackjack() {
             </header>
             <main>
                 <div className={styles.table}>
-                    <div className={styles.hand}>
-                        <div className={styles.cards}>
-                            {croupierHand.cards.map((card, index) => (
-                                card ? (
-                                    <img
-                                        key={index}
-                                        alt={card.img}
-                                        className={styles.card}
-                                        src={`/images/cards/${card.img}`}
-                                    />
-                                ) : null
-                            ))}
+                    {playerHand.cards.length ?
+                        <div className={styles.hand}>
+                            <div className={styles.cards}>
+                                {croupierHand.cards.map((card, index) => (
+                                    card ? (
+                                        <img
+                                            key={index}
+                                            alt={card.img}
+                                            className={styles.card}
+                                            src={`/images/cards/${card.img}`}
+                                        />
+                                    ) : null
+                                ))}
+                            </div>
+                            <div className={styles.totalValue}>{croupierHand.totalValue}</div>
                         </div>
-                        <div className={styles.totalValue}>{croupierHand.totalValue}</div>
-                    </div>
-                    <div className={styles.hand}>
-                        <div className={styles.totalValue}>{playerHand.totalValue}</div>
-                        <div className={styles.cards}>
-                            {playerHand.cards.map((card, index) => (
-                                card ? (
-                                    <img
-                                        key={index}
-                                        alt={card.img}
-                                        className={styles.card}
-                                        src={`/images/cards/${card.img}`}
-                                    />
-                                ) : null
-                            ))}
+                        : null
+                    }
+                    {playerHand.cards.length ?
+                        <div className={styles.hand}>
+
+                            <div className={styles.totalValue}>{playerHand.totalValue}</div>
+                            <div className={styles.cards}>
+                                {playerHand.cards.map((card, index) => (
+                                    card ? (
+                                        <img
+                                            key={index}
+                                            alt={card.img}
+                                            className={styles.card}
+                                            src={`/images/cards/${card.img}`}
+                                        />
+                                    ) : null
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                        : null
+                    }
                 </div>
                 <div className={styles.buttons}>
                     <button className={styles.btn} onClick={handleHit}>HIT</button>
@@ -342,8 +357,9 @@ function Blackjack() {
                     <button className={styles.btn}>DOUBLE DOWN</button>
                     <button className={styles.btn} onClick={handlePlay}>{text}</button>
                 </div>
-                <div className={styles.buttons}>
-                    <input type="number" value={bet} onChange={handleBetInput} placeholder="0"/>
+                <div className={styles.buttonsBet}>
+                    <input className={styles.input} type="number" value={bet} onChange={handleBetInput}
+                           placeholder="0"/>
                     <button className={styles.btn} onClick={handleBet}>BET</button>
                 </div>
             </main>
