@@ -1,6 +1,7 @@
 'use client'
 import React, {useState, useEffect, useRef} from 'react';
 import styles from './blackjack.module.css'
+import EndGame from "@/app/main/blackjack/endGame";
 
 // Define the Blackjack component
 function Blackjack() {
@@ -22,7 +23,6 @@ function Blackjack() {
     }
 
     // Initialize state variables
-    const [text, setText] = useState<string>("PLAY"); // Button text for "PLAY"/"PLAY AGAIN"
     const [deck, setDeck] = useState<Card[]>([]); // Deck of cards
     const [playerHand, setPlayerHand] = useState<Hand>({cards: [], totalValue: 0}); // Player's hand
     const [croupierHand, setCroupierHand] = useState<Hand>({cards: [], totalValue: 0}); // Dealer's hand
@@ -34,6 +34,8 @@ function Blackjack() {
     const [newMoney, setNewMoney] = useState<number>(0); // Value of player's money after changes
     const isBet = useRef<boolean>(false);
     const multiplier = useRef<number>(1);
+    const [endGameText, setEndGameText] = useState<string>("");
+    let endGameFunction: (() => void) | null = null;
     // Basic deck of cards (standard 52-card deck)
     const basicDeck: Card[] = [
         {img: 'ace-club.png', value: 11},
@@ -90,6 +92,9 @@ function Blackjack() {
         {img: 'two-spade.png', value: 2}
     ];
 
+    const handleMount = (showEndGame: () => void) => {
+        endGameFunction = showEndGame; // Przechowujemy funkcję showEndGame
+    };
     // Fetch player data when the component loads
     useEffect(() => {
         const fetchData = async () => {
@@ -188,6 +193,10 @@ function Blackjack() {
         if (playerHand.totalValue > 21) {
             setIsStopped(true);
             console.log("YOU LOST");
+            setEndGameText("😢 You Lost 😢");
+            if (endGameFunction) {
+                endGameFunction();
+            }
             isBet.current = false;
         } else if (playerHand.totalValue === 21) {
             console.log("BLACKJACK");
@@ -207,8 +216,16 @@ function Blackjack() {
             // Check if dealer also has Blackjack
             if (croupierHand.cards.length === 2 && croupierHand.totalValue === 21) {
                 console.log("DRAW! Both you and the dealer have Blackjack.");
+                setEndGameText("PUSH!!!");
+                if (endGameFunction) {
+                    endGameFunction();
+                }
             } else {
                 console.log("BLACKJACK! YOU WON!");
+                setEndGameText("🏆 You Win! 🏆");
+                if (endGameFunction) {
+                    endGameFunction();
+                }
                 multiplier.current = 2.5;
                 if (bet) {
                     setNewMoney(m =>
@@ -222,18 +239,34 @@ function Blackjack() {
         // Check if dealer has Blackjack
         else if (croupierHand.cards.length === 2 && croupierHand.totalValue === 21) {
             console.log("YOU LOST! Dealer has Blackjack.");
+            setEndGameText("😢 You Lost 😢");
+            if (endGameFunction) {
+                endGameFunction();
+            }
             isBet.current = false;
         } else if (croupierHand.totalValue > playerHand.totalValue && croupierHand.totalValue <= 21) {
             console.log("YOU LOST!");
+            setEndGameText("😢 You Lost 😢");
+            if (endGameFunction) {
+                endGameFunction();
+            }
             isBet.current = false;
         } else if (croupierHand.totalValue === playerHand.totalValue && croupierHand.totalValue === 21) {
             console.log("DRAW!");
+            setEndGameText("PUSH!!!");
+            if (endGameFunction) {
+                endGameFunction();
+            }
             if (bet) {
                 setNewMoney(m => m + bet);
             }
             isBet.current = false;
         } else if ((croupierHand.totalValue < playerHand.totalValue && croupierHand.totalValue >= 17) || croupierHand.totalValue > 21) {
             console.log("YOU WON!");
+            setEndGameText("🏆 You Win! 🏆");
+            if (endGameFunction) {
+                endGameFunction();
+            }
             multiplier.current = 2;
             if (bet) {
                 setNewMoney(m =>
@@ -245,13 +278,7 @@ function Blackjack() {
         }
     }, [croupierHand]);
 
-    // Start a new game when the player clicks "PLAY"
-    function handlePlay(): void {
-        if (isBet.current) {
-            setStartGame(true); // Set game start flag
-            setText("PLAY AGAIN"); // Update button text
-        }
-    }
+
 
     // Handle bet input change
     function handleBetInput(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -268,6 +295,7 @@ function Blackjack() {
             if (bet > player.money) {
                 console.log("You can't bet more than you have");
             } else {
+                setStartGame(true);
                 setNewMoney(player.money - bet); // Deduct bet from player's money
                 isBet.current = true;
             }
@@ -305,65 +333,67 @@ function Blackjack() {
 
     // JSX rendering the game UI
     return (
-        <div className={styles.blackjackPage}>
-            <header className={styles.userData}>
-                <p>User: {player.username}</p>
-                <p>Your money: {player.money}</p>
-                <p>Bet: {bet}</p>
-            </header>
-            <main>
-                <div className={styles.table}>
-                    {playerHand.cards.length ?
-                        <div className={styles.hand}>
-                            <div className={styles.cards}>
-                                {croupierHand.cards.map((card, index) => (
-                                    card ? (
-                                        <img
-                                            key={index}
-                                            alt={card.img}
-                                            className={styles.card}
-                                            src={`/images/cards/${card.img}`}
-                                        />
-                                    ) : null
-                                ))}
+        <>
+            <div className={styles.blackjackPage}>
+                <header className={styles.userData}>
+                    <p>User: {player.username}</p>
+                    <p>Your money: {player.money}</p>
+                    <p>Bet: {bet}</p>
+                </header>
+                <main>
+                    <div className={styles.table}>
+                        {playerHand.cards.length ?
+                            <div className={styles.hand}>
+                                <div className={styles.cards}>
+                                    {croupierHand.cards.map((card, index) => (
+                                        card ? (
+                                            <img
+                                                key={index}
+                                                alt={card.img}
+                                                className={styles.card}
+                                                src={`/images/cards/${card.img}`}
+                                            />
+                                        ) : null
+                                    ))}
+                                </div>
+                                <div className={styles.totalValue}>{croupierHand.totalValue}</div>
                             </div>
-                            <div className={styles.totalValue}>{croupierHand.totalValue}</div>
-                        </div>
-                        : null
-                    }
-                    {playerHand.cards.length ?
-                        <div className={styles.hand}>
+                            : null
+                        }
+                        {playerHand.cards.length ?
+                            <div className={styles.hand}>
 
-                            <div className={styles.totalValue}>{playerHand.totalValue}</div>
-                            <div className={styles.cards}>
-                                {playerHand.cards.map((card, index) => (
-                                    card ? (
-                                        <img
-                                            key={index}
-                                            alt={card.img}
-                                            className={styles.card}
-                                            src={`/images/cards/${card.img}`}
-                                        />
-                                    ) : null
-                                ))}
+                                <div className={styles.totalValue}>{playerHand.totalValue}</div>
+                                <div className={styles.cards}>
+                                    {playerHand.cards.map((card, index) => (
+                                        card ? (
+                                            <img
+                                                key={index}
+                                                alt={card.img}
+                                                className={styles.card}
+                                                src={`/images/cards/${card.img}`}
+                                            />
+                                        ) : null
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                        : null
-                    }
-                </div>
-                <div className={styles.buttons}>
-                    <button className={styles.btn} onClick={handleHit}>HIT</button>
-                    <button className={styles.btn} onClick={handleStand}>STAND</button>
-                    <button className={styles.btn}>DOUBLE DOWN</button>
-                    <button className={styles.btn} onClick={handlePlay}>{text}</button>
-                </div>
-                <div className={styles.buttonsBet}>
-                    <input className={styles.input} type="number" value={bet} onChange={handleBetInput}
-                           placeholder="0"/>
-                    <button className={styles.btn} onClick={handleBet}>BET</button>
-                </div>
-            </main>
-        </div>
+                            : null
+                        }
+                    </div>
+                    <div className={styles.buttons}>
+                        <button className={styles.btn} onClick={handleHit}>HIT</button>
+                        <button className={styles.btn} onClick={handleStand}>STAND</button>
+                        <button className={styles.btn}>DOUBLE DOWN</button>
+                    </div>
+                    <div className={styles.buttonsBet}>
+                        <input className={styles.input} type="number" value={bet} onChange={handleBetInput}
+                               placeholder="0"/>
+                        <button className={styles.btn} onClick={handleBet}>BET</button>
+                    </div>
+                </main>
+            </div>
+            <EndGame text={endGameText} onMount={handleMount}/>
+        </>
     );
 }
 

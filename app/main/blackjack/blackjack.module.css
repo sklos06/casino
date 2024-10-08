@@ -144,3 +144,45 @@
 .input:focus::placeholder {
     color: #000;
 }
+
+.notification {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ffcc33, #ff66cc);
+    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    font-size: 2.5em;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    z-index: 9999;
+    animation: fadeIn 0.5s ease, fadeOut 0.5s ease 2.5s;
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+}
