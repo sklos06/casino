@@ -1,0 +1,29 @@
+.page{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.reel{
+    background-color: black ;
+    width: 100px;
+    height: 200px;
+}
+
+.reels{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+}
+
+.button{
+    background-color: #007BFF;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    border: none;
+    margin-left: 20px;
+}
