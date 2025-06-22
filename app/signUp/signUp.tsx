@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import styles from './signUp.module.css'
+import {useRouter} from "next/navigation";
 
 type User = {
     username: string,
@@ -16,7 +17,7 @@ type User = {
 }
 
 function SignUp() {
-
+    const router = useRouter();
     const [user, setUser] = useState<User>({
         username: '',
         password: '',
@@ -52,11 +53,13 @@ function SignUp() {
 
             if (response.ok) {
                 console.log('Użytkownik został pomyślnie zarejestrowany.');
+                router.push('/signIn');
             } else {
                 const errorData = await response.json();
                 console.log(`Błąd: ${errorData.error}`);
             }
         } catch (error) {
+            console.log(error);
             console.log('Wystąpił błąd podczas rejestracji.');
         }
     };
