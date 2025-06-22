@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import {useRouter} from "next/navigation";
+import styles from './main.module.css'
 
 function Main() {
     const [money, setMoney] = useState<number | null>(null);
@@ -45,15 +46,15 @@ function Main() {
     }
 
     return (
-        <>
+        <div className={styles.page}>
             <Link href={"./main/blackjack"}>
-                <button>Blackjack</button>
+                <button className={styles.btn}>Blackjack</button>
             </Link>
             {money !== null ? <p>Your wallet: {money}</p> : <p>Loading...</p>}
-            <hr/>
-            <button onClick={deleteUser}>Remove Account</button>
 
-        </>
+            <button className={styles.btn} onClick={deleteUser}>Remove Account</button>
+
+        </div>
     );
 }
 
